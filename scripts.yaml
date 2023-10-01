@@ -1,0 +1,18 @@
+open_garage_loopstand:
+  alias: Garagedeur loopstand
+  sequence:
+  - device_id: 1c7ff02226d282af01352fafc6fa8f0c
+    domain: light
+    entity_id: 92a7617d83d0433f094470ce01e6e322
+    type: flash
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 7
+      milliseconds: 0
+  - device_id: 1c7ff02226d282af01352fafc6fa8f0c
+    domain: light
+    entity_id: 92a7617d83d0433f094470ce01e6e322
+    type: flash
+  mode: single
+  icon: mdi:garage-alert

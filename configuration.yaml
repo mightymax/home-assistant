@@ -1,0 +1,136 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+input_number:
+  dimmer_woonkamer:
+    name: "Dimmer status Woonkamer #30 TV"
+    initial: 190
+    min: 0
+    max: 255
+  dimmer_keuken:
+    name: "Dimmer status Keuken #30"
+    initial: 190
+    min: 0
+    max: 255
+
+http:
+  server_port: 8123
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 192.168.68.30
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+
+# see https://github.com/zigpy/zigpy/wiki/OTA-Device-Firmware-Updates
+zha:
+  zigpy_config:
+    ota:
+      ikea_provider: true
+      inovelli_provider: true
+      ledvance_provider: true
+      salus_provider: true
+      sonoff_provider: true
+      thirdreality_provider: true
+
+template:
+  - binary_sensor:
+      - name: Garagedeur open/dicht
+        state: >
+          {% if (states('binary_sensor.lumi_lumi_sensor_magnet_aq2_opening') == 'off') -%}
+            gesloten
+          {%- else -%}
+            geopend
+          {%- endif %}
+        icon: >
+          {% if (states('binary_sensor.lumi_lumi_sensor_magnet_aq2_opening') == 'off') -%}
+            mdi:garage-variant
+          {%- else -%}
+            mdi:garage-open-variant
+          {%- endif %}
+
+homekit:
+  - filter:
+      include_domains:
+        - media_player
+      include_entities:
+        - light.lampen_keuken_groep
+        - light.lampen_woonkamer_groep
+        - cover.garage_door
+        - cover.garage_door_loopstand
+    entity_config:
+      light.lampen_keuken_groep:
+        name: Keukenlicht
+      light.lampen_woonkamer_groep:
+        name: Woonkamerlicht
+      media_player.samsung_q90_series_75:
+        name: "TV"
+      media_player.woonkamer:
+        name: Sonos
+        feature_list:
+          - feature: on_off
+          - feature: play_pause
+          - feature: play_stop
+          - feature: toggle_mute
+  - name: "HASS Bridge #32"
+    port: 21032
+    filter:
+      include_entities:
+        - cover.garage_door
+        - cover.garage_door_loopstand
+
+cover:
+  - platform: template
+    covers:
+      garage_door:
+        device_class: garage
+        friendly_name: "Garagedeur"
+        value_template: "{{ is_state('binary_sensor.lumi_lumi_sensor_magnet_aq2_opening', 'on') }}"
+        open_cover:
+          service: light.turn_on
+          entity_id: light.garagedeur_relais_light
+        close_cover:
+          service: light.turn_on
+          entity_id: light.garagedeur_relais_light
+        stop_cover:
+          service: light.turn_on
+          entity_id: light.garagedeur_relais_light
+        icon_template: >-
+          {% if(states("binary_sensor.lumi_lumi_sensor_magnet_aq2_opening") == 'on') %}
+            mdi:garage-alert
+          {% else %}
+            mdi:garage
+          {% endif %}
+      garage_door_loopstand:
+        device_class: garage
+        friendly_name: "Garagedeur loopstand"
+        value_template: "{{ is_state('binary_sensor.lumi_lumi_sensor_magnet_aq2_opening', 'on') }}"
+        open_cover:
+          - service: light.turn_on
+            entity_id: light.garagedeur_relais_light
+          - delay: "00:00:07"
+          - service: light.turn_on
+            entity_id: light.garagedeur_relais_light
+        close_cover:
+          service: light.turn_on
+          entity_id: light.garagedeur_relais_light
+        stop_cover:
+          service: light.turn_on
+          entity_id: light.garagedeur_relais_light
+        icon_template: >-
+          {% if(states("binary_sensor.lumi_lumi_sensor_magnet_aq2_opening") == 'on') %}
+            mdi:garage-alert-variant
+          {% else %}
+            mdi:garage-variant
+          {% endif %}
+
+toon:
+  client_id: !secret toon_client_id
+  client_secret: !secret toon_client_secret

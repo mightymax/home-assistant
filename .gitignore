@@ -1,0 +1,10 @@
+.cloud
+.storage
+.HA_VERSION
+blueprints
+image
+secrets.yaml
+home-assistant.*
+home-assistant_v2.*
+zigbee.db*
+automations
