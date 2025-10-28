@@ -5,21 +5,16 @@ default_config:
 frontend:
   themes: !include_dir_merge_named themes
 
-automation: !include automations.yaml
+automation ui: !include automations.yaml
+automation manual: !include_dir_merge_list automations/
 script: !include scripts.yaml
 scene: !include scenes.yaml
 
 input_number:
-  dimmer_woonkamer:
-    name: "Dimmer status Woonkamer #30 TV"
-    initial: 190
+  dimmer_knop1_stop:
+    initial: 0
     min: 0
-    max: 255
-  dimmer_keuken:
-    name: "Dimmer status Keuken #30"
-    initial: 190
-    min: 0
-    max: 255
+    max: 1
 
 http:
   server_port: 8123
@@ -39,6 +34,11 @@ zha:
       salus_provider: true
       sonoff_provider: true
       thirdreality_provider: true
+  enable_quirks: True
+  custom_quirks_path: custom_zha_quirks
+
+homeassistant:
+  customize: !include customize.yaml
 
 template:
   - binary_sensor:
@@ -55,23 +55,80 @@ template:
           {%- else -%}
             mdi:garage-open-variant
           {%- endif %}
-
+  - lock:
+      - name: "Voordeur"
+        id: lock_voordeur
+        state: "{{ is_state('input_boolean.voordeur_geopend', 'on') }}"
+        lock:
+          service: input_boolean.turn_off
+          target:
+            entity_id: light.relais_voordeur_licht
+        unlock:
+          service: light.turn_on
+          target:
+            entity_id: light.relais_voordeur_licht
 homekit:
   - filter:
       include_domains:
         - media_player
       include_entities:
+        - camera.192_168_68_52
         - light.lampen_keuken_groep
-        - light.lampen_woonkamer_groep
+        - light.silicon_labs_ezsp_lampen_woonkamer
+        - light.schakelaar_dakterras_switch
         - cover.garage_door
         - cover.garage_door_loopstand
+        - cover.voordeur_opener
+        - light.silicon_labs_ezsp_slaapkamer
+        - light.silicon_labs_ezsp_slaapkamer_overloop
+        - light.silicon_labs_ezsp_badkamer
+        - scene.waakstand_woonkamer
+        - scene.leeslamp
+        - scene.bad_sfeer
+        - light.silicon_labs_ezsp_kantoor
+        - light.dimmer_eetkamer_licht
+        - light.achterwand_keuken
+        - climate.anna
+        - binary_sensor.aanwezigheidssensor_1_bezetting
+        - light.silicon_labs_ezsp_ganglicht
+        - light.lampen_wc_groep
     entity_config:
+      light.silicon_labs_ezsp_ganglicht:
+        name: Ganglicht
+      light.achterwand_keuken:
+        name: Achterwand keuken
+      binary_sensor.aanwezigheidssensor_1_bezetting:
+        name: Aanwezigheid woonkamer
+      climate.anna:
+        name: Klimaat
+      light.silicon_labs_ezsp_slaapkamer:
+        name: Slaapkamer
+      scene.waakstand_woonkamer:
+        name: Waakstand
+      scene.leeslamp:
+        name: Leeslamp
+      scene.bad_sfeer:
+        name: Bad
+      light.silicon_labs_ezsp_kantoor:
+        name: Kantoor
+      light.silicon_labs_ezsp_badkamer:
+        name: Badkamer
+      light.silicon_labs_ezsp_slaapkamer_overloop:
+        name: Slaapkamer overloop
       light.lampen_keuken_groep:
         name: Keukenlicht
-      light.lampen_woonkamer_groep:
+      light.dimmer_eetkamer_licht:
+        name: Eetkamerlicht
+      light.silicon_labs_ezsp_lampen_woonkamer:
         name: Woonkamerlicht
+      light.schakelaar_dakterras_switch:
+        name: Dakterras
       media_player.samsung_q90_series_75:
-        name: "TV"
+        name: TV
+      light.lampen_wc_groep:
+        name: WC
+      camera.192_168_68_52:
+        name: Webcam garage
       media_player.woonkamer:
         name: Sonos
         feature_list:
@@ -85,13 +142,14 @@ homekit:
       include_entities:
         - cover.garage_door
         - cover.garage_door_loopstand
+        # - cover.voordeur_opener
 
 cover:
   - platform: template
     covers:
       garage_door:
         device_class: garage
-        friendly_name: "Garagedeur"
+        friendly_name: "Garage"
         value_template: "{{ is_state('binary_sensor.lumi_lumi_sensor_magnet_aq2_opening', 'on') }}"
         open_cover:
           service: light.turn_on
@@ -109,28 +167,63 @@ cover:
             mdi:garage
           {% endif %}
       garage_door_loopstand:
-        device_class: garage
-        friendly_name: "Garagedeur loopstand"
+        device_class: door
+        friendly_name: "Loopstand"
         value_template: "{{ is_state('binary_sensor.lumi_lumi_sensor_magnet_aq2_opening', 'on') }}"
         open_cover:
-          - service: light.turn_on
-            entity_id: light.garagedeur_relais_light
-          - delay: "00:00:07"
-          - service: light.turn_on
-            entity_id: light.garagedeur_relais_light
+          - if:
+              - condition: state
+                entity_id: binary_sensor.lumi_lumi_sensor_magnet_aq2_opening
+                state: "off"
+            then:
+              - service: light.turn_on
+                entity_id: light.garagedeur_relais_light
+              - delay: "00:00:07"
+              - service: light.turn_on
+                entity_id: light.garagedeur_relais_light
         close_cover:
-          service: light.turn_on
-          entity_id: light.garagedeur_relais_light
+          - if:
+              - condition: state
+                entity_id: binary_sensor.lumi_lumi_sensor_magnet_aq2_opening
+                state: "off"
+            then:
+              - service: light.turn_on
+                entity_id: light.garagedeur_relais_light
         stop_cover:
           service: light.turn_on
           entity_id: light.garagedeur_relais_light
         icon_template: >-
           {% if(states("binary_sensor.lumi_lumi_sensor_magnet_aq2_opening") == 'on') %}
-            mdi:garage-alert-variant
+            mdi:door-open
           {% else %}
-            mdi:garage-variant
+            mdi:door
           {% endif %}
+      voordeur_opener:
+        friendly_name: "Voordeur"
+        open_cover:
+          service: light.turn_on
+          target:
+            entity_id: light.relais_voordeur_licht
+        close_cover:
+          service: light.turn_on
+          target:
+            entity_id: light.relais_voordeur_licht
+        stop_cover:
+          service: light.turn_on
+          target:
+            entity_id: light.relais_voordeur_licht
+        value_template: "false" # Altijd gesloten
+# light:
 
-toon:
-  client_id: !secret toon_client_id
-  client_secret: !secret toon_client_secret
+#   - platform: switch
+#     name: GarageLichtVoor
+#     entity_id: switch.aan_uit_schakelaar_garage_voor_switch
+
+# amcrest:
+#   - host: 192.168.68.52
+#     username: admin
+#     password: pavbiz-hUqruc-5fusqu
+#     port: 80
+#     name: Garage camera
+#     binary_sensors:
+#       - motion_detected_polled

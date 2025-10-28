@@ -1,4 +1,23 @@
 cover.garage_door:
   device_class: garage
-  garage_door_loopstand:
-  device_class: garage
+script.voordeur:
+  device_class: door
+cover.garage_door_loopstand:
+  device_class: garage_door
+light.relais_voordeur_light:
+  device_class: door
+
+# homeassistant:
+#   customize:
+#     script.voordeur:
+#       device_class: door
+#     garage_door_loopstand:
+#       device_class: garage
+#     light.relais_voordeur_light:
+#       device_class: door
+
+# Dit werkt niet....
+light.relais_voordeur_licht:
+  templates:
+    icon_color: if (state === 'on') return 'rgb(0,255,0)'; else return 'rgb(255,0,0)';
+    icon: if (state === 'on') return 'mdi:door-open'; if (state === 'off') return 'mdi:door-closed';

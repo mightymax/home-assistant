@@ -1,1 +1,295 @@
-[]
+- id: '1697133035001'
+  name: Waakstand woonkamer
+  entities:
+    light.woonkamer_tv_1_3_light:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 102
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Woonkamer lamp 1/7 Light
+      supported_features: 40
+      state: 'on'
+    light.woonkamer_lamp_2_7_light:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 102
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Woonkamer lamp 2/7 Light
+      supported_features: 40
+      state: 'on'
+    light.woonkamer_lamp_3_7_light:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 102
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Woonkamer lamp 3/7 Light
+      supported_features: 40
+      state: 'on'
+    light.woonkamer_tv_2_3_light:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 153
+      friendly_name: Woonkamer lamp 4/7 Light
+      supported_features: 40
+      state: 'off'
+    light.woonkamer_tv_3_3_light:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 153
+      friendly_name: Woonkamer lamp 5/7 Light
+      supported_features: 40
+      state: 'off'
+    light.woonkamer_lamp_6_7_light:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 153
+      friendly_name: Woonkamer lamp 6/7 Light
+      supported_features: 40
+      state: 'off'
+    light.woonkamer_lamp_7_7_light:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 153
+      friendly_name: Woonkamer lamp 7/7 Light
+      supported_features: 40
+      state: 'off'
+    light.signify_netherlands_b_v_lct010_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: false
+      off_brightness: 153
+      friendly_name: Lamp vensterbank Light
+      supported_features: 44
+      state: 'off'
+    light.signify_netherlands_b_v_lct001_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      color_mode:
+      brightness:
+      color_temp_kelvin:
+      color_temp:
+      hs_color:
+      rgb_color:
+      xy_color:
+      effect:
+      off_with_transition: false
+      off_brightness: 153
+      friendly_name: Staande lamp Light
+      supported_features: 44
+      state: 'off'
+    light.dimmer_eetkamer_licht:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Dimmer Eetkamer Licht
+      supported_features: 40
+      state: 'off'
+    light.lampen_keuken_groep:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 1
+      icon: mdi:countertop
+      friendly_name: lampen keuken (groep)
+      supported_features: 40
+      state: 'off'
+    light.silicon_labs_ezsp_kantoor:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Silicon Labs EZSP Kantoor
+      supported_features: 40
+      state: 'off'
+    media_player.samsung_q90_series_75:
+      source_list:
+      - TV
+      - HDMI
+      - Apple Music
+      - Apple TV
+      - Canal Digitaal
+      - Disney+
+      - Gallery
+      - Google Play Movies
+      - HBO Max
+      - HD Austria
+      - Internet
+      - NLZIET
+      - NOS Live
+      - NPO
+      - Netflix
+      - Odido TV
+      - Pathé Thuis
+      - Prime Video
+      - Privacyvoorkeuren
+      - Rakuten TV
+      - Samsung Promotion
+      - SkyShowtime
+      - SmartThings
+      - Spotify - muziek en podcasts
+      - The Explorers
+      - Viaplay
+      - Videoland
+      - YouTube
+      - discovery+
+      - e-Manual
+      device_class: tv
+      supported_features: 20413
+      friendly_name: Samsung Q90 Series (75)
+      state: 'off'
+  icon: mdi:weather-night
+  metadata:
+    light.lampen_keuken_groep:
+      entity_only: true
+    light.silicon_labs_ezsp_kantoor:
+      entity_only: true
+    media_player.samsung_q90_series_75:
+      entity_only: true
+- id: '1706387229640'
+  name: Bad sfeer
+  entities:
+    light.badkamer_5_6_licht:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 102
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Badkamer 5/6 Licht
+      supported_features: 40
+      state: 'on'
+    light.badkamer_6_6_licht:
+      supported_color_modes:
+      - brightness
+      color_mode: brightness
+      brightness: 99
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Badkamer 6/6 Licht
+      supported_features: 40
+      state: 'on'
+    light.badkamer_1_6_licht:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Badkamer 1/6 Licht
+      supported_features: 40
+      state: 'off'
+    light.badkamer_2_6_licht:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Badkamer 2/6 Licht
+      supported_features: 40
+      state: 'off'
+    light.badkamer_3_6_licht:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Badkamer 3/6 Licht
+      supported_features: 40
+      state: 'off'
+    light.badkamer_4_6_licht:
+      supported_color_modes:
+      - brightness
+      color_mode:
+      brightness:
+      off_with_transition: false
+      off_brightness: 254
+      friendly_name: Badkamer 4/6 Licht
+      supported_features: 40
+      state: 'off'
+  icon: mdi:bathtub
+  metadata: {}
+- id: '1746126583238'
+  name: Leeslamp
+  entities:
+    light.signify_netherlands_b_v_lct001_light:
+      min_color_temp_kelvin: 2000
+      max_color_temp_kelvin: 6535
+      min_mireds: 153
+      max_mireds: 500
+      effect_list:
+      - 'off'
+      - colorloop
+      supported_color_modes:
+      - color_temp
+      - xy
+      effect: 'off'
+      color_mode: color_temp
+      brightness: 254
+      color_temp_kelvin: 2732
+      color_temp: 366
+      hs_color:
+      - 28.327
+      - 64.71
+      rgb_color:
+      - 255
+      - 168
+      - 90
+      xy_color:
+      - 0.522
+      - 0.387
+      off_with_transition: false
+      off_brightness:
+      friendly_name: Staande lamp Light
+      supported_features: 44
+      state: 'on'
+  icon: mdi:floor-lamp
+  metadata: {}

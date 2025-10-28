@@ -1,0 +1,80 @@
+- alias: "Dimmer slaapkamer 1/2: licht slaapkamer -5"
+  trigger:
+    # dimmer rechts:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 1f1ba2aa85d3a07386c3aae49035d73b
+        command: move
+        params:
+          move_mode: 1
+  action:
+    repeat:
+      sequence:
+        - service: light.turn_on
+          data:
+            brightness_step: 5
+          target:
+            entity_id: light.silicon_labs_ezsp_slaapkamer
+        - delay:
+            milliseconds: 100
+      until:
+        or:
+          - condition: numeric_state
+            entity_id: light.silicon_labs_ezsp_slaapkamer
+            attribute: "brightness"
+            above: 254
+          - condition: numeric_state
+            entity_id: input_number.dimmer_knop1_stop
+            above: 0
+
+- alias: "Dimmer slaapkamer 1/2: licht slaapkamer + 5"
+  trigger:
+    # dimmer rechts:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 1f1ba2aa85d3a07386c3aae49035d73b
+        command: move
+        params:
+          move_mode: 0
+  action:
+    repeat:
+      sequence:
+        - service: light.turn_on
+          data:
+            brightness_step: -5
+          target:
+            entity_id: light.silicon_labs_ezsp_slaapkamer
+        - delay:
+            milliseconds: 100
+      until:
+        or:
+          - condition: numeric_state
+            entity_id: light.silicon_labs_ezsp_slaapkamer
+            attribute: "brightness"
+            below: 2
+          - condition: numeric_state
+            entity_id: input_number.dimmer_knop1_stop
+            above: 0
+
+- alias: "stop dimmen"
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 1f1ba2aa85d3a07386c3aae49035d73b
+        command: stop
+  action:
+    - service: input_number.set_value
+      data:
+        value: 1
+      target:
+        entity_id: input_number.dimmer_knop1_stop
+    - delay:
+        milliseconds: 100
+    - service: input_number.set_value
+      data:
+        value: 0
+      target:
+        entity_id: input_number.dimmer_knop1_stop

@@ -1,18 +1,34 @@
 open_garage_loopstand:
-  alias: Garagedeur loopstand
+  alias: Deur loopstand
   sequence:
-  - device_id: 1c7ff02226d282af01352fafc6fa8f0c
-    domain: light
-    entity_id: 92a7617d83d0433f094470ce01e6e322
-    type: flash
-  - delay:
-      hours: 0
-      minutes: 0
-      seconds: 7
-      milliseconds: 0
-  - device_id: 1c7ff02226d282af01352fafc6fa8f0c
-    domain: light
-    entity_id: 92a7617d83d0433f094470ce01e6e322
-    type: flash
+    - if:
+        - condition: state
+          entity_id: binary_sensor.lumi_lumi_sensor_magnet_aq2_opening
+          state: "off"
+      then:
+        - type: turn_on
+          device_id: 1c7ff02226d282af01352fafc6fa8f0c
+          entity_id: 92a7617d83d0433f094470ce01e6e322
+          domain: light
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 7
+            milliseconds: 0
+        - type: turn_on
+          device_id: 1c7ff02226d282af01352fafc6fa8f0c
+          entity_id: 92a7617d83d0433f094470ce01e6e322
+          domain: light
   mode: single
   icon: mdi:garage-alert
+void:
+  alias: Void
+  sequence: []
+  mode: single
+
+pulse_voordeur_relais:
+  alias: Puls voordeurrelais
+  sequence:
+    - action: light.turn_on
+      target:
+        entity_id: light.relais_voordeur_licht

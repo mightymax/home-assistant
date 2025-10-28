@@ -1,0 +1,134 @@
+- alias: "Schakelaar #1: licht overloop"
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 54097b92b4f5c5b5a7045c014025cd9e
+        command: remote_button_short_press
+  action:
+    service: light.toggle
+    target:
+      entity_id: light.silicon_labs_ezsp_overloop
+
+- alias: "Schakelaar bed #1/3: licht slaapkamer"
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        endpoint_id: 1
+        device_id: ea0c8155015b70803a99ac48cb877fe4
+        command: remote_button_short_press
+    # 2e schakelaar (dimmer rechts):
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 1f1ba2aa85d3a07386c3aae49035d73b
+        command: "off"
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 1f1ba2aa85d3a07386c3aae49035d73b
+        command: "on"
+  action:
+    service: light.toggle
+    target:
+      entity_id: light.silicon_labs_ezsp_slaapkamer
+
+- alias: "Schakelaar bed #2/3: licht slaapkamer overloop"
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        endpoint_id: 2
+        device_id: ea0c8155015b70803a99ac48cb877fe4
+        command: remote_button_short_press
+    # 3e schakelaar (dimmer links):
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 83c9191be8e20ffe5358da8c185bf7d7
+        command: "on"
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 83c9191be8e20ffe5358da8c185bf7d7
+        command: "off"
+  action:
+    service: light.toggle
+    target:
+      entity_id: light.silicon_labs_ezsp_slaapkamer_overloop
+# - alias: "Dimmer slaapkamer 1/2: licht slaapkamer overloop"
+#   trigger:
+#     # 3e schakelaar (dimmer links):
+#     - platform: event
+#       event_type: zha_event
+#       event_data:
+#         device_id: 83c9191be8e20ffe5358da8c185bf7d7
+# command: "on"
+#   action:
+#     service: light.turn_on
+#     target:
+#       entity_id: light.silicon_labs_ezsp_slaapkamer_overloop
+
+- alias: "Schakelaar bed #3/3: licht badkamer"
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        endpoint_id: 3
+        device_id: ea0c8155015b70803a99ac48cb877fe4
+        command: remote_button_short_press
+    # 2e schakelaar in badkamer:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 81b0d7c3776bb20487ef7aee19bf6850
+        command: remote_button_short_press
+  action:
+    service: light.toggle
+    target:
+      #  Sonof mini achter kruipruimte:
+      # device_id: f85fd125af101e9fc56b5e5db765aaca
+      #  Sonof mini achter kruipruimte:
+      entity_id: light.silicon_labs_ezsp_badkamer
+    data:
+      brightness_pct: 30
+
+# Via GUI gemaakt
+# - alias: "Schakelaar trap naar slaapkamer"
+#   trigger:
+#     # 2e schakelaar op overloop:
+#     - platform: event
+#       event_type: zha_event
+#       event_data:
+#         device_id: 98700f860c5e92bfed92d900df060174
+#         command: remote_button_short_press
+#   action:
+#     service: light.toggle
+#     target:
+#       entity_id:
+#         - light.silicon_labs_ezsp_slaapkamer_overloop
+#         - light.silicon_labs_ezsp_slaapkamer
+
+- alias: "Scene switch 2-kanaals gang: ganglicht toggle"
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 9b8a14590603190d4beb64b62bf72646
+        endpoint_id: 1
+  action:
+    - service: light.toggle
+      target:
+        entity_id: light.silicon_labs_ezsp_ganglicht
+- alias: "Scene switch 2-kanaals gang: ganglicht toggle"
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        device_id: 9b8a14590603190d4beb64b62bf72646
+        endpoint_id: 2
+  action:
+    - service: light.toggle
+      target:
+        entity_id: light.silicon_labs_ezsp_overloop

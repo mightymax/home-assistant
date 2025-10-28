@@ -4,116 +4,10 @@
   use_blueprint:
     path: homeassistant/motion_light.yaml
     input:
-      motion_entity: binary_sensor.hue_motion_sensor_1_motion
+      motion_entity: binary_sensor.hue_motion_sensor_3_motion
       light_target:
-        area_id: wc_30
-      no_motion_wait: 60
-- id: '1695310549367'
-  alias: Woonkamer Aan
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 1
-      command: 'on'
-  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: turn_on
-  condition: []
-  action:
-  - service: light.turn_on
-    data:
-      transition: 1
-      brightness: 202
-      color_temp: 414
-    target:
-      entity_id: light.silicon_labs_ezsp_lampen_woonkamer
-  mode: single
-- id: '1695310589432'
-  alias: Woonkamer TV Uit
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 1
-      command: 'off'
-  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: turn_off
-  condition: []
-  action:
-  - service: light.turn_off
-    data:
-      transition: 1
-    target:
-      entity_id: light.silicon_labs_ezsp_lampen_woonkamer
-  mode: single
-- id: '1695336540440'
-  alias: 'Save state Woonkamer #30 - TV'
-  description: Sla de huidige brightness van de woonkamer lampen op.
-  trigger:
-  - platform: event
-    event_type: state_changed
-    event_data:
-      entity_id: light.lampen_woonkamer_groep
-  condition:
-  - condition: state
-    entity_id: light.lampen_woonkamer_groep
-    state: 'on'
-  action:
-  - service: input_number.set_value
-    data:
-      value: '{{ state_attr(''light.lampen_woonkamer_groep'', ''brightness'')|float}}'
-    target:
-      entity_id: input_number.dimmer_woonkamer
-  mode: single
-- id: '1695393043151'
-  alias: 'Keuken #30 Aan'
-  description: Druk op knop 3 aan
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 3
-      command: 'on'
-  condition: []
-  action:
-  - service: light.turn_on
-    data:
-      transition: 1
-      brightness: "{% if (states('input_number.dimmer_keuken') not in ['unknown',
-        'unavailable']) -%}\n  {{ states('input_number.dimmer_keuken')|float }}\n{%-
-        else -%}\n  {{ 0.75 * 255 | float }}\n{%- endif %}\n"
-    target:
-      entity_id: light.lampen_keuken_groep
-  mode: single
-- id: '1695393091936'
-  alias: 'Keuken #30 Uit'
-  description: Druk op knop 3 uit
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 3
-      command: 'off'
-  condition: []
-  action:
-  - service: light.turn_off
-    data:
-      transition: 1
-    target:
-      entity_id: light.lampen_keuken_groep
-  mode: single
+        entity_id: light.lampen_wc_groep
+      no_motion_wait: 120
 - id: '1695893126255'
   alias: Dim keuken met dimmer
   description: ''
@@ -157,137 +51,6 @@
     target:
       entity_id: light.lampen_keuken_groep
   mode: single
-- id: '1695394500633'
-  alias: 'Keuken #30 Achterwand aan'
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 4
-      command: 'on'
-  condition: []
-  action:
-  - service: light.turn_on
-    data: {}
-    target:
-      entity_id: light.keuken_achterwand_aan_uit_schakelaar_light
-  mode: single
-- id: '1695394556687'
-  alias: 'Keuken #30 achterwand uit'
-  description: ''
-  trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 4
-      command: 'off'
-  condition: []
-  action:
-  - service: light.turn_off
-    data: {}
-    target:
-      entity_id: light.keuken_achterwand_aan_uit_schakelaar_light
-  mode: single
-- id: '1695887038859'
-  alias: 'Save state Keuken #30'
-  description: Bewaart de laatste brightness van de Keuken lampen.
-  trigger:
-  - platform: event
-    event_type: state_changed
-    event_data:
-      entity_id: light.lampen_keuken_groep
-  condition:
-  - condition: state
-    entity_id: light.lampen_keuken_groep
-    state: 'on'
-  action:
-  - service: input_number.set_value
-    data:
-      value: '{{ state_attr(''light.lampen_keuken_groep'', ''brightness'')|float }}
-
-        '
-    target:
-      entity_id: input_number.dimmer_keuken
-  mode: single
-- id: '1695480885725'
-  alias: Garagelicht aan/uit
-  description: Garagelicht gaat aan bij beweging en automatisch weer uit.
-  use_blueprint:
-    path: homeassistant/motion_light.yaml
-    input:
-      motion_entity: binary_sensor.hue_motion_sensor_3_motion
-      light_target:
-        device_id: bfbd6a399e56b9143fedc6b4feccb050
-- id: '1695822699131'
-  alias: Garagedeur open/sluit
-  description: ''
-  trigger:
-  - device_id: 3f914bcd07fb7b6d8946d35d98256434
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: remote_button_short_press
-  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
-    domain: zha
-    platform: device
-    type: remote_button_triple_press
-    subtype: turn_on
-  condition: []
-  action:
-  - service: light.toggle
-    data: {}
-    target:
-      device_id: 1c7ff02226d282af01352fafc6fa8f0c
-    enabled: false
-  - device_id: 1c7ff02226d282af01352fafc6fa8f0c
-    domain: light
-    entity_id: 92a7617d83d0433f094470ce01e6e322
-    type: flash
-  mode: single
-- id: '1695827679679'
-  alias: Melding garagedeur
-  description: Geeft push notificatie bij garagedeur open/dicht
-  trigger:
-  - type: not_opened
-    platform: device
-    device_id: d40521dfc097d66846210eb793110722
-    entity_id: 82d1024e9c9f482cb337dd25f3efe22e
-    domain: binary_sensor
-  condition: []
-  action:
-  - service: notify.mobile_app_iphone_van_mark
-    data:
-      message: '{% if(states("binary_sensor.lumi_lumi_sensor_magnet_aq2_opening")
-        == ''on'') -%}
-
-        Garage is open.
-
-        {%- else -%}
-
-        Garage is gesloten.
-
-        {%- endif %}
-
-        '
-      title: Garagedeur
-  mode: single
-- id: '1695393043151123'
-  alias: TV Wake on LAN
-  description: ''
-  mode: single
-  trigger:
-  - platform: device
-    device_id: 546f3e88ccb7f864fb0a3ac07a412ae6
-    domain: samsungtv
-    type: samsungtv.turn_on
-  condition: []
-  action:
-  - service: wake_on_lan.send_magic_packet
-    data:
-      mac: D0:D0:03:35:A9:C1
 - id: '1696080312659'
   alias: Garagedeur open/dicht loopdoorgang
   description: ''
@@ -297,7 +60,7 @@
     platform: device
     type: remote_button_double_press
     subtype: remote_button_double_press
-  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
+  - device_id: 453e96d872f96c40bb181b7ac7ffb22f
     domain: zha
     platform: device
     type: remote_button_double_press
@@ -306,44 +69,316 @@
   action:
   - service: script.open_garage_loopstand
     data: {}
+  - service: automation.trigger
+    data:
+      skip_condition: true
+    target:
+      entity_id: automation.garagelicht_aan_uit
   mode: single
-- id: '1696171255917'
-  alias: Lampen woonkamper +10%
-  description: Verhoog de helderheid van de lampen in de woonkamer met 10%.
+- id: '1696191390077'
+  alias: Licht vensterbank normaal
+  description: ''
   trigger:
-  - platform: event
-    event_type: zha_event
-    event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 1
-      command: stop_with_on_off
-      params:
-        move_mode: 0
-  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
-    domain: zha
+  - type: not_opened
     platform: device
-    type: remote_button_short_press
-    subtype: dim_up
+    device_id: d40521dfc097d66846210eb793110722
+    entity_id: 82d1024e9c9f482cb337dd25f3efe22e
+    domain: binary_sensor
+  condition: []
+  action:
+  - if:
+    - condition: device
+      type: is_on
+      device_id: 3d8450c77d377d00d6a080887a84ff12
+      entity_id: 84d0280a1f4cd69bec2fd4221fd0d735
+      domain: light
+    then:
+    - service: light.turn_on
+      data:
+        hs_color:
+        - 35
+        - 47
+      target:
+        device_id: 78c810382d09630f94684017facc56c3
+    else:
+    - service: light.turn_off
+      data: {}
+      target:
+        device_id: 78c810382d09630f94684017facc56c3
+  mode: single
+- id: '1696191778157'
+  alias: Flash garage open
+  description: ''
+  trigger:
+  - type: opened
+    platform: device
+    device_id: d40521dfc097d66846210eb793110722
+    entity_id: 82d1024e9c9f482cb337dd25f3efe22e
+    domain: binary_sensor
   condition: []
   action:
   - service: light.turn_on
     data:
-      brightness_step_pct: 10
+      hs_color:
+      - 0
+      - 100
+      flash: long
+    target:
+      device_id: 78c810382d09630f94684017facc56c3
+  mode: single
+- id: '1696253375804'
+  alias: Schakelaar overloop
+  description: ''
+  trigger:
+  - device_id: 454992e63e988349efdc838c99ba3339
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: left
+  condition: []
+  action:
+  - service: light.toggle
+    data: {}
+    target:
+      entity_id: light.silicon_labs_ezsp_overloop
+  mode: single
+- id: '1696354125918'
+  alias: Garagelicht aan/uit
+  description: ''
+  use_blueprint:
+    path: homeassistant/motion_light.yaml
+    input:
+      motion_entity: binary_sensor.hue_motion_sensor_2_motion
+      light_target:
+        entity_id: light.schakelaar_garage_achter_light
+        device_id: 056748ab19860639991cbe718749cf5d
+      no_motion_wait: 300
+- id: '1696519760453'
+  alias: Ganglicht aan/uit
+  description: ''
+  use_blueprint:
+    path: homeassistant/motion_light.yaml
+    input:
+      motion_entity: binary_sensor.hue_motion_sensor_1_motion
+      light_target:
+        entity_id: light.silicon_labs_ezsp_ganglicht
+- id: '1696520248457'
+  alias: Schakelaar gang op overloop
+  description: ''
+  trigger:
+  - device_id: 454992e63e988349efdc838c99ba3339
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: right
+  condition: []
+  action:
+  - service: light.toggle
+    data:
+      transition: 1
+    target:
+      entity_id: light.silicon_labs_ezsp_ganglicht
+  mode: single
+- id: '1696665505465'
+  alias: 4-Zone remote
+  description: Bedien de woonkamer en keuken met de 4-zone afstandsbediening.
+  use_blueprint:
+    path: mightymax/4-zone-switch.yaml
+    input:
+      remote: b03e17ced66c55e87cadf1de97f17626
+      light_1:
+        entity_id: light.silicon_labs_ezsp_lampen_woonkamer
+      light_2:
+        entity_id: light.lampen_keuken_groep
+      light_3:
+        entity_id: light.dimmer_eetkamer_licht
+      light_4:
+        device_id: efb292e9e9723e6b794ec231f01a3258
+- id: '1697125566345'
+  alias: Nachtstand slaapkamer
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.ikea_beweginssensor_motion
+    from: 'off'
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.silicon_labs_ezsp_badkamer
+    state: 'off'
+  action:
+  - service: light.turn_on
+    data:
+      brightness_pct: 10
+    target:
+      device_id: fb64ee54e21090d812413b5020d52cec
+  - wait_for_trigger:
+    - platform: state
+      entity_id:
+      - binary_sensor.ikea_beweginssensor_motion
+      from: 'on'
+      to: 'off'
+  - delay:
+      hours: 0
+      minutes: 1
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target:
+      device_id: fb64ee54e21090d812413b5020d52cec
+  mode: single
+- id: '1697125909366'
+  alias: Dakterras aan met zonsondergang
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunset
+    offset: 0
+  condition: []
+  action:
+  - service: light.turn_on
+    data: {}
+    target:
+      entity_id: light.schakelaar_dakterras_switch
+  mode: single
+- id: '1697126008043'
+  alias: Dakterras uit met zonsopkomst
+  description: ''
+  trigger:
+  - platform: sun
+    event: sunrise
+    offset: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.schakelaar_dakterras_switch
+  mode: single
+- id: '1697133859628'
+  alias: Waakstand scene uit
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - scene.waakstand_woonkamer
+  condition:
+  - condition: device
+    type: is_off
+    device_id: 9ff93370ead6cb54714395b6a1e3108b
+    entity_id: ae1f700a579b6e8a3ef6bdedfc4838d8
+    domain: light
+  - condition: device
+    type: is_on
+    device_id: 3d8450c77d377d00d6a080887a84ff12
+    entity_id: 84d0280a1f4cd69bec2fd4221fd0d735
+    domain: light
+  action:
+  - service: light.turn_off
+    data: {}
     target:
       entity_id: light.silicon_labs_ezsp_lampen_woonkamer
   mode: single
-- id: '1696171530645'
-  alias: Lampen woonkamer -10%
-  description: Verlaag de helderheid van de lampen in de woonkamer met 10%.
+- id: '1697148191924'
+  alias: Tag Test is scanned
+  description: ''
+  trigger:
+  - platform: tag
+    tag_id: ecd8c652-f1bb-4235-b98e-7fab70e96ca7
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: light.woonkamer_30
+      state: 'on'
+    then:
+    - service: light.turn_off
+      data: {}
+      target:
+        device_id: 48d1ae0c843c3654f586ff5b9233c25f
+        entity_id:
+        - light.lampen_keuken_groep
+        - light.silicon_labs_ezsp_lampen_woonkamer
+    else:
+    - service: light.turn_off
+      data: {}
+      target:
+        device_id: 48d1ae0c843c3654f586ff5b9233c25f
+        entity_id:
+        - light.lampen_keuken_groep
+        - light.silicon_labs_ezsp_lampen_woonkamer
+  mode: single
+- id: '1697977383030'
+  alias: Licht slaapkamer + overloop
+  description: Bediening via schakelaar trap naar slaapkamer.
   trigger:
   - platform: event
     event_type: zha_event
     event_data:
-      device_id: b03e17ced66c55e87cadf1de97f17626
-      endpoint_id: 1
-      command: stop_with_on_off
-      params:
-        move_mode: 1
+      device_id: 98700f860c5e92bfed92d900df060174
+      command: remote_button_short_press
+  condition: []
+  action:
+  - if:
+    - condition: state
+      entity_id: light.silicon_labs_ezsp_slaapkamer
+      state: 'off'
+    then:
+    - service: light.turn_on
+      data: {}
+      target:
+        entity_id:
+        - light.silicon_labs_ezsp_slaapkamer
+        - light.silicon_labs_ezsp_slaapkamer_overloop
+        - light.silicon_labs_ezsp_badkamer
+    else:
+    - service: light.turn_off
+      data: {}
+      target:
+        entity_id:
+        - light.silicon_labs_ezsp_slaapkamer_overloop
+        - light.silicon_labs_ezsp_slaapkamer
+        - light.silicon_labs_ezsp_badkamer
+  mode: single
+- id: '1706370472294'
+  alias: Kantoor Aan met Hue dimmer
+  description: ''
+  trigger:
+  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.silicon_labs_ezsp_kantoor
+    data: {}
+  mode: single
+- id: '1706370523047'
+  alias: Kantoor Uit met Hue dimmer
+  description: ''
+  trigger:
+  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_off
+  condition: []
+  action:
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.silicon_labs_ezsp_kantoor
+  mode: single
+- id: '1706370669675'
+  alias: Dim down Kantoor met Hue dimmer
+  description: ''
+  trigger:
   - device_id: a249cbb8a9cfb6e3453a036aba7272b8
     domain: zha
     platform: device
@@ -352,8 +387,171 @@
   condition: []
   action:
   - service: light.turn_on
+    metadata: {}
     data:
+      transition: 1
       brightness_step_pct: -10
     target:
-      entity_id: light.silicon_labs_ezsp_lampen_woonkamer
+      entity_id: light.silicon_labs_ezsp_kantoor
   mode: single
+- id: '1706370821848'
+  alias: Dim up Kantoor met Hue dimmer
+  description: ''
+  trigger:
+  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: dim_up
+  condition: []
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness_step_pct: 10
+      transition: 1
+    target:
+      entity_id: light.silicon_labs_ezsp_kantoor
+  mode: single
+- id: '1706370964808'
+  alias: Dim up pressed Kantoor met Hue dimmer
+  description: ''
+  trigger:
+  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
+    domain: zha
+    platform: device
+    type: remote_button_long_press
+    subtype: dim_up
+  condition: []
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      transition: 1
+      brightness_step_pct: 5
+    target:
+      entity_id: light.silicon_labs_ezsp_kantoor
+  mode: single
+- id: '1706371030229'
+  alias: Dim down pressed Kantoor met Hue dimmer
+  description: ''
+  trigger:
+  - device_id: a249cbb8a9cfb6e3453a036aba7272b8
+    domain: zha
+    platform: device
+    type: remote_button_long_press
+    subtype: dim_down
+  condition: []
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness_step_pct: -5
+      transition: 1
+    target:
+      entity_id: light.silicon_labs_ezsp_kantoor
+  mode: single
+- id: '1706871406329'
+  alias: Open/Sluit garagedeur
+  description: ''
+  trigger:
+  - device_id: 453e96d872f96c40bb181b7ac7ffb22f
+    domain: zha
+    platform: device
+    type: remote_button_short_press
+    subtype: turn_on
+  condition: []
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.garagedeur_relais_light
+  mode: single
+- id: '1707644562058'
+  alias: Badkamer licht aan (100%)
+  description: ''
+  trigger:
+  - platform: event
+    event_type: zha_event
+    event_data:
+      device_id: 81b0d7c3776bb20487ef7aee19bf6850
+      command: remote_button_double_press
+  condition: []
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 100
+    target:
+      entity_id: light.silicon_labs_ezsp_badkamer
+  mode: single
+- id: '1716891159902'
+  alias: Garage als aanwezig
+  description: ''
+  trigger:
+  - type: occupied
+    platform: device
+    device_id: 94f429b7f5b707efbe0dce101e5f658d
+    entity_id: 42b50c2f12fcbd200da7683de8844cf8
+    domain: binary_sensor
+  condition: []
+  action:
+  - service: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.schakelaar_garage_achter_light
+      device_id: 056748ab19860639991cbe718749cf5d
+  mode: single
+- id: '1716891257543'
+  alias: Garage uit bij afwezigheid
+  description: ''
+  trigger:
+  - type: not_occupied
+    platform: device
+    device_id: 94f429b7f5b707efbe0dce101e5f658d
+    entity_id: 42b50c2f12fcbd200da7683de8844cf8
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 0
+  condition: []
+  action:
+  - service: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.schakelaar_garage_achter_light
+      device_id: 056748ab19860639991cbe718749cf5d
+  mode: single
+- id: '1726932393290'
+  alias: Licht aan als garagedeur opent
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - cover.garage_door
+    from: closed
+    to: opening
+  condition: []
+  action:
+  - type: turn_on
+    device_id: 056748ab19860639991cbe718749cf5d
+    entity_id: 3b9fbfa4d949223731d1b179bed4a464
+    domain: light
+  - type: turn_on
+    device_id: bfbd6a399e56b9143fedc6b4feccb050
+    entity_id: e50ec86ef9b562da1001364bdf4e0a3e
+    domain: light
+  mode: single
+- id: '1733833943625'
+  alias: Gang via overloop aan/uit
+  description: ''
+  use_blueprint:
+    path: homeassistant/motion_light.yaml
+    input:
+      motion_entity: binary_sensor.hue_motion_sensor_4_beweging
+      light_target:
+        entity_id: light.silicon_labs_ezsp_ganglicht
